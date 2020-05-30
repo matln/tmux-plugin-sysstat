@@ -7,6 +7,27 @@ Allow to print CPU usage, memory & swap, load average, net I/O metrics in Tmux s
 
 You might checkout [tmux-config](https://github.com/samoshkin/tmux-config) repo to see this plugin in action.
 
+Updates 2020/5/29
+--------
+Show cpu usage in chart form.
+
+### usage
+
+```
+#{sysstat_cpu_chart}
+```
+
+### configure parameters
+
+* `@cpu_chart_width`                  default: "10"
+* `@cpu_chart_with_percent`           default: "0"  ("0" or "1")
+* `@cpu_chart_bg`                     default: "#343746""
+* `@cpu_chart_medium_threshold`       default: "30"
+* `@cpu_chart_stress_threshold`       default: "80"
+* `@cpu_chart_color_low`              default: "#00ff00"
+* `@cpu_chart_color_medium`           default: "#ffff00"
+* `@cpu_chart_color_stress`           default: "#ff0000"
+
 Features
 --------
 - CPU usage

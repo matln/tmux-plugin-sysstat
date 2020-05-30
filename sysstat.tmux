@@ -5,6 +5,7 @@ source "$CURRENT_DIR/scripts/helpers.sh"
 
 placeholders=(
   "\#{sysstat_cpu}"
+  "\#{sysstat_cpu_chart}"
   "\#{sysstat_mem}"
   "\#{sysstat_swap}"
   "\#{sysstat_loadavg}"
@@ -12,6 +13,7 @@ placeholders=(
 
 commands=(
   "#($CURRENT_DIR/scripts/cpu.sh)"
+  "#($CURRENT_DIR/scripts/cpu_chart.sh)"
   "#($CURRENT_DIR/scripts/mem.sh)"
   "#($CURRENT_DIR/scripts/swap.sh)"
   "#($CURRENT_DIR/scripts/loadavg.sh)"
