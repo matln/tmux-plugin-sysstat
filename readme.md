@@ -13,6 +13,8 @@ Show cpu usage in chart form.
 
 ### usage
 
+![cpu_chart](/screenshots/cpu_chart.gif)
+
 ```
 #{sysstat_cpu_chart}
 ```
