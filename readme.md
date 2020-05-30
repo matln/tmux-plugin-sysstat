@@ -11,9 +11,9 @@ Updates 2020/5/29
 --------
 Show cpu usage in chart form.
 
-### usage
-
 ![cpu_chart](/screenshots/cpu_chart.gif)
+
+### usage
 
 ```
 #{sysstat_cpu_chart}
