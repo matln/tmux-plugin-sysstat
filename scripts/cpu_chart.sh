@@ -72,7 +72,10 @@ print_cpu_usage_chart() {
     percent_template="#[fg=#{cpu_color}, bg=${chart_bg_color}] #{cpu_current}#[default]"
     cpu_view="${cpu_view}${percent_template}"
     cpu_view="${cpu_view//'#{cpu_color}'/${cpu_current_color}}"
-    cpu_view="${cpu_view//'#{cpu_current}'/$(printf "%.1f%%" "$cpu_usage_current")}"
+    cpu_view="${cpu_view//'#{cpu_current}'/$(if [ $(echo "$cpu_usage_current < 10" | bc) -eq 1 ]; \
+      then printf " %.1f%%" "$cpu_usage_current"; \
+      else printf "%.1f%%" "$cpu_usage_current"; \
+      fi)}"
   fi
 
   echo -e "$cpu_view"
