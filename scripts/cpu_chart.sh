@@ -48,7 +48,7 @@ print_cpu_usage_chart() {
   local cpu_view=${cpu_view_tmpl}
 
   if [ ${#cpu_usage[@]} -ne ${chart_width} ]; then
-    echo "cpu usage log file lines number doesn't equal to chart_width!"
+    echo "Initializing..."
     exit 1
   fi
 

@@ -25,7 +25,7 @@ Show cpu usage in chart form.
 * `@cpu_chart_with_percent`           default: "0"  ("0" or "1")
 * `@cpu_chart_bg`                     default: "#343746""
 * `@cpu_chart_medium_threshold`       default: "30"
-* `@cpu_chart_stress_threshold`       default: "80"
+* `@cpu_chart_stress_threshold`       default: "70"
 * `@cpu_chart_color_low`              default: "#00ff00"
 * `@cpu_chart_color_medium`           default: "#ffff00"
 * `@cpu_chart_color_stress`           default: "#ff0000"
