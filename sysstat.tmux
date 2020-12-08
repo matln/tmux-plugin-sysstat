@@ -32,12 +32,12 @@ do_interpolation() {
 update_tmux_option() {
   local option="$1"
   local option_value="$(get_tmux_option "$option")"
-  local new_option_value="$(do_interpolation "$option_value")"
-  set_tmux_option "$option" "$new_option_value"
+  local new_option_value="$(do_interpolation "${option_value}")"
+  set_tmux_option "$option" "${new_option_value}"
 }
 
 main() {
-  cpu_tmp_dir=$(mktemp -d)
+  cpu_tmp_dir=$(mktemp -d /tmp/tmux_cpu.XXXX)
   tmux set-option -gq "@sysstat_cpu_tmp_dir" "$cpu_tmp_dir"
 
   update_tmux_option "status-right"

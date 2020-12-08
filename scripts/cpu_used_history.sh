@@ -8,15 +8,9 @@ set -e
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
-chart_width=$(get_tmux_option "@cpu_chart_width" "10")
 refresh_interval=$(get_tmux_option "status-interval" "5")
 samples_count="60"
 cpu_used_history_file="$(get_tmux_option "@sysstat_cpu_tmp_dir" "/dev/null")/cpu_used_history.log"
-
-if [ ! -f "$cpu_used_history_file" ]; then
-  log_init=$(seq -s "\n" ${chart_width} | sed -r 's/[0-9]+/0.0/g')
-  echo -e ${log_init} > ${cpu_used_history_file}
-fi
 
 get_cpu_usage() {
   if is_osx; then

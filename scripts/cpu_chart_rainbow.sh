@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -u
 set -e
@@ -50,7 +50,8 @@ print_cpu_usage_chart() {
   local cpu_view=${cpu_view_tmpl}
 
   if [ ${#cpu_usage[@]} -ne ${chart_width} ]; then
-    echo "Initializing..."
+    # echo "Initializing..."
+    echo "An error occurred"
     exit 1
   fi
 
@@ -88,21 +89,27 @@ print_cpu_usage_chart() {
 }
 
 get_cpu_usage_history() {
-  local cpu_used_log="$cpu_tmp_dir/cpu_used_history.log"
+  local cpu_used_log
+  cpu_used_log="$cpu_tmp_dir/cpu_used_history.log"
+  if [ ! -f "$cpu_used_log" ]; then
+    log_init=$(seq -s "\n" ${chart_width} | sed -r 's/[0-9]+/0.0/g')
+    echo -e ${log_init} > ${cpu_used_log}
+  fi
   cat $cpu_used_log
 
   start_collect_cpu_usage_history >/dev/null 2>&1
 }
 
 start_collect_cpu_usage_history() {
-  local collect_cpu_pidfile="$cpu_tmp_dir/cpu_used_history.pid"
+  local collect_cpu_pidfile
+  collect_cpu_pidfile="$cpu_tmp_dir/cpu_used_history.pid"
 
   # check if cpu collect process is running, otherwise start it in background
   if [ -f "$collect_cpu_pidfile" ] && ps -p "$(cat "$collect_cpu_pidfile")" > /dev/null 2>&1; then
     return;
   fi
   
-  "$CURRENT_DIR/cpu_used_history.sh" &>/dev/null &
+  bash "$CURRENT_DIR/cpu_used_history.sh" &>/dev/null &
   if [ -n "$(jobs -n)" ]; then
     echo "$!" > "${collect_cpu_pidfile}"
   else
