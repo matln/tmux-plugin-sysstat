@@ -36,9 +36,18 @@ get_cpu_usage() {
         | sed -u -nr '/CPU:/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)%[[:space:]]*id.*/\1/p' \
         | stdbuf -o0 awk '{ print 100-$0 }'
     else
-      top -b -n "$samples_count" -d "$refresh_interval" \
-        | sed -u -nr '/%Cpu/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)[[:space:]]*id.*/\1/p' \
-        | stdbuf -o0 awk '{ print 100-$0 }'
+      if [ -x "$(command -v gawk)" ]; then
+        # For ubuntu18.04, stdbuf and awk cause an extremely long delay in CPU usage updates
+        # https://github.com/samoshkin/tmux-plugin-sysstat/issues/16
+        # replace awk with gawk
+        top -b -n "$samples_count" -d "$refresh_interval" \
+          | sed -u -nr '/%Cpu/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)[[:space:]]*id.*/\1/p' \
+          | stdbuf -o0 gawk '{ print 100-$0 }'
+      else
+        top -b -n "$samples_count" -d "$refresh_interval" \
+          | sed -u -nr '/%Cpu/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)[[:space:]]*id.*/\1/p' \
+          | stdbuf -o0 awk '{ print 100-$0 }'
+      fi
     fi
   fi
 }
