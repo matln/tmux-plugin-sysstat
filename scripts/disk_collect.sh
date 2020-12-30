@@ -19,7 +19,7 @@ device="$(get_tmux_option "@sysstat_io_device" "/dev/sdb")"
 get_disk_util() {
   if command_exists "iostat"; then
     iostat -dxm $device "$refresh_interval" "$samples_count" | \
-      stdbuf -o0 gawk '{if(length($14)!=0 && substr($14,0,1)!="%")print $14}'
+      stdbuf -o0 gawk '{if(length($14)!=0 && substr($NF,0,1)!="%")print $NF}'
   fi
 }
 
