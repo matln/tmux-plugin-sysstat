@@ -10,7 +10,7 @@ source "$CURRENT_DIR/helpers.sh"
 
 refresh_interval=$(get_tmux_option "status-interval" "5")
 samples_count="60"
-cpu_used_history_file="$(get_tmux_option "@sysstat_cpu_tmp_dir" "/dev/null")/cpu_used_history.log"
+cpu_used_history_file="$(get_tmux_option "@sysstat_tmp_dir" "/dev/null")/cpu_used_history.log"
 
 get_cpu_usage() {
   if is_osx; then

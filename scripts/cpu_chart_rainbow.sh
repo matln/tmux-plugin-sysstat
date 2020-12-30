@@ -8,7 +8,7 @@ LC_NUMERIC=C
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
-cpu_tmp_dir=$(tmux show-option -gqv "@sysstat_cpu_tmp_dir")
+cpu_tmp_dir=$(tmux show-option -gqv "@sysstat_tmp_dir")
 chart_width=$(get_tmux_option "@cpu_chart_width" "10")
 chart_bg_color=$(get_tmux_option "@cpu_chart_bg" "#343746")
 cpu_used_percent=$(get_tmux_option "@cpu_chart_with_percent" "0")

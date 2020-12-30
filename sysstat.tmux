@@ -8,6 +8,7 @@ placeholders=(
   "\#{sysstat_cpu_chart}"
   "\#{sysstat_cpu_chart_rainbow}"
   "\#{sysstat_mem}"
+  "\#{sysstat_disk_io}"
   "\#{sysstat_swap}"
   "\#{sysstat_loadavg}"
 )
@@ -17,6 +18,7 @@ commands=(
   "#($CURRENT_DIR/scripts/cpu_chart.sh)"
   "#($CURRENT_DIR/scripts/cpu_chart_rainbow.sh)"
   "#($CURRENT_DIR/scripts/mem.sh)"
+  "#($CURRENT_DIR/scripts/disk_io.sh)"
   "#($CURRENT_DIR/scripts/swap.sh)"
   "#($CURRENT_DIR/scripts/loadavg.sh)"
 )
@@ -37,8 +39,8 @@ update_tmux_option() {
 }
 
 main() {
-  cpu_tmp_dir=$(mktemp -d /tmp/tmux_cpu.XXXX)
-  tmux set-option -gq "@sysstat_cpu_tmp_dir" "$cpu_tmp_dir"
+  tmp_dir=$(mktemp -d /tmp/tmux_log.XXXX)
+  tmux set-option -gq "@sysstat_tmp_dir" "$tmp_dir"
 
   update_tmux_option "status-right"
   update_tmux_option "status-left"
