@@ -12,12 +12,13 @@ cpu_tmp_dir=$(tmux show-option -gqv "@sysstat_tmp_dir")
 chart_width=$(get_tmux_option "@cpu_chart_width" "10")
 chart_bg_color=$(get_tmux_option "@cpu_chart_bg" "#343746")
 cpu_used_percent=$(get_tmux_option "@cpu_chart_with_percent" "0")
+cpu_chart=$(get_tmux_option "@cpu_chart" "1")
 
 template=''
 for n in `seq 0 $(($chart_width-1))`; do
   template=${template}"#[fg=#{color${n}}, bg=${chart_bg_color}]#{bar${n}}#[default]"
 done
-cpu_view_tmpl=${template}
+cpu_view_tmpl="${template}"
 
 cpu_medium_threshold=$(get_tmux_option "@cpu_chart_medium_threshold" "30")
 cpu_stress_threshold=$(get_tmux_option "@cpu_chart_stress_threshold" "70")
@@ -47,7 +48,7 @@ get_bar_color(){
 print_cpu_usage_chart() {
   local cpu_usage=$(get_cpu_usage_history)
   cpu_usage=(${cpu_usage//\n/ })
-  local cpu_view=${cpu_view_tmpl}
+  local cpu_view=""
 
   if [ ${#cpu_usage[@]} -ne ${chart_width} ]; then
     # echo "Initializing..."
@@ -55,28 +56,31 @@ print_cpu_usage_chart() {
     exit 1
   fi
 
-  for bar_idx in `seq 0 $(($chart_width-1))`; do
-    for n in `seq $((${#bars[@]}-1)) -1 0`; do
-      if fcomp $((100 * $n / 8)) ${cpu_usage[$bar_idx]}; then
-        local bar=${bars[$n]}
-        break
-      fi
-    done
+  if [ ${cpu_chart} -eq 1 ]; then
+    local cpu_view="${cpu_view_tmpl} "
+    for bar_idx in `seq 0 $(($chart_width-1))`; do
+      for n in `seq $((${#bars[@]}-1)) -1 0`; do
+        if fcomp $((100 * $n / 8)) ${cpu_usage[$bar_idx]}; then
+          local bar=${bars[$n]}
+          break
+        fi
+      done
 
-    local color_idx=$n
-    if [ $color_idx -eq 7 ]; then
-      (( color_idx=color_idx-1 ))
-    fi
-    local colour=${base_color[${color_idx}]}
-    cpu_view="${cpu_view//"#{color${bar_idx}}"/${colour}}"
-    cpu_view="${cpu_view//"#{bar${bar_idx}}"/${bar}}"
-  done
+      local color_idx=$n
+      if [ $color_idx -eq 7 ]; then
+        (( color_idx=color_idx-1 ))
+      fi
+      local colour=${base_color[${color_idx}]}
+      cpu_view="${cpu_view//"#{color${bar_idx}}"/${colour}}"
+      cpu_view="${cpu_view//"#{bar${bar_idx}}"/${bar}}"
+    done
+  fi
 
   if [ ${cpu_used_percent} -eq 1 ]; then
     # the last item
     local cpu_usage_current="${cpu_usage[${#cpu_usage[@]}-1]}"
     local cpu_current_color=$(get_bar_color "$cpu_usage_current")
-    percent_template="#[fg=#{cpu_color}, bg=${chart_bg_color}] #{cpu_current}#[default]"
+    percent_template="#[fg=#{cpu_color}, bg=${chart_bg_color}]#{cpu_current}#[default]"
     cpu_view="${cpu_view}${percent_template}"
     cpu_view="${cpu_view//'#{cpu_color}'/${cpu_current_color}}"
     cpu_view="${cpu_view//'#{cpu_current}'/$(if [ $(echo "$cpu_usage_current < 10" | bc) -eq 1 ]; \
